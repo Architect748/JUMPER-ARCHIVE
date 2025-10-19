@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INTRANET – Jumper Command Access</title>
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: #ffffff;
+      font-family: monospace;
+      padding: 2rem;
+      margin: 0;
+    }
+    .terminal {
+      background-color: #000;
+      border: 2px solid #ffffff;
+      padding: 1rem;
+      max-width: 800px;
+      margin: auto;
+    }
+    #log {
+      white-space: pre-wrap;
+      height: 300px;
+      overflow-y: auto;
+    }
+    #inputLine {
+      display: flex;
+      gap: 0.5rem;
+    }
+    input {
+      background: #111;
+      color: #ffffff;
+      border: none;
+      border-bottom: 1px solid #ffffff;
+      flex: 1;
+      font-size: 1rem;
+    }
+    input:focus {
+      outline: none;
+    }
+    a.secret-link {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="terminal">
+    <div id="log">
+      <strong>INTRANET JUMPER_02.3</strong><br>
+      Système d'archives sécurisé – accès restreint<br>
+      Tapez une commande pour continuer.<br>
+    </div>
+    <div id="inputLine">
+      <span>&gt;</span>
+      <input type="text" id="commandInput" autofocus />
+    </div>
+  </div>
+  <script>
+  const log = document.getElementById("log");
+  const input = document.getElementById("commandInput");
+
+  const commands = {
+    "unlock dossier_violet": {
+      text: "Accès au dossier VIOLET débloqué",
+      url: "https://drive.google.com/file/d/1bnE9k97fnZQSyPUzkXwC7K91Nx_WqlpG/view?usp=sharing"
+    },
+    "unlock dossier_madison.incident": {
+      text: "Accès au dossier MADISON.INCIDENT débloqué",
+      url: "https://drive.google.com/file/d/14skVEgfBNcFJRcF6Bjr8jZOMa2gqbbGt/view?usp=sharing"
+    },
+    "help": {
+      text: "Commandes disponibles :\n - unlock dossier_violet\n - unlock dossier_madison.incident"
+    }
+  };
+
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      const cmd = input.value.toLowerCase().trim();
+      log.innerHTML += `\n> ${cmd}\n`;
+
+      const command = commands[cmd];
+
+      if (command) {
+        if (command.url) {
+          // Création du lien de manière dynamique
+          const link = document.createElement("a");
+          link.href = command.url;
+          link.textContent = command.text;
+          link.target = "_blank";
+          link.className = "secret-link";
+          log.appendChild(link);
+        } else {
+          log.innerHTML += `${command.text}\n`;
+        }
+      } else {
+        log.innerHTML += "Commande inconnue. Tapez 'help' pour l'aide.\n";
+      }
+
+      input.value = "";
+      log.scrollTop = log.scrollHeight;
+    }
+  });
+</script>
+</body>
+</html>
